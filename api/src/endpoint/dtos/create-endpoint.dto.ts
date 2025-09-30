@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsString } from "class-validator";
-import { ApiMethods } from "../api-method.constants";
+import { HttpMethods } from "../http-methods.constants";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateEndpointDto {
@@ -9,8 +9,8 @@ export class CreateEndpointDto {
   path: string;
 
   @ApiProperty({})
-  @IsEnum(ApiMethods)
-  method: ApiMethods;
+  @IsEnum(HttpMethods)
+  method: HttpMethods;
 
   @ApiProperty()
   description?: string;

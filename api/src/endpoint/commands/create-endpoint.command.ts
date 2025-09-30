@@ -2,14 +2,14 @@ import { Command, CommandHandler } from "@nestjs/cqrs";
 import { Endpoint } from "../endpoint.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { ApiMethods } from "../api-method.constants";
+import { HttpMethods } from "../http-methods.constants";
 import { Api } from "src/api/api.entity";
 import { NotFoundException } from "@nestjs/common";
 
 export type CreateEndpointParams = {
   apiId: number;
   path: string;
-  method: ApiMethods;
+  method: HttpMethods;
   description?: string;
 };
 

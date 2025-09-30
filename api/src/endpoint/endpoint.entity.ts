@@ -1,6 +1,6 @@
 import { BaseEntity } from "../db/base.entity";
 import { Column, Entity, ManyToOne } from "typeorm";
-import { ApiMethods } from "./api-method.constants";
+import { HttpMethods } from "./http-methods.constants";
 import { Api } from "../api/api.entity";
 
 @Entity()
@@ -9,7 +9,7 @@ export class Endpoint extends BaseEntity {
   path: string;
 
   @Column()
-  method: ApiMethods;
+  method: HttpMethods;
 
   @Column({ nullable: true })
   description: string;
