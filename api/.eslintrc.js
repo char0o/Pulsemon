@@ -15,10 +15,6 @@ module.exports = {
   rules: {
     '@typescript-eslint/semi': ['error', 'always'],
 
-    '@typescript-eslint/quotes': ['error', 'single'],
-
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-
-    '@typescript-eslint/indent': ['error', 2], 
   },
 };

@@ -1,3 +1,3 @@
-import { CqrsModule } from '@nestjs/cqrs';
+import { CqrsModule } from "@nestjs/cqrs";
 
 export const cqrsModule = CqrsModule.forRoot();

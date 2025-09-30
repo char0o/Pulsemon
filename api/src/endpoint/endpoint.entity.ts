@@ -1,21 +1,26 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity } from "../db/base.entity";
+import { Column, Entity, ManyToOne } from "typeorm";
+import { ApiMethods } from "./api-method.constants";
+import { Api } from "../api/api.entity";
 
 @Entity()
-export class Endpoint {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Endpoint extends BaseEntity {
   @Column()
-  @IsString()
   path: string;
 
   @Column()
-  @IsNotEmpty()
-  @IsString()
-  method: string;
+  method: ApiMethods;
 
-  @Column()
-  @IsString()
+  @Column({ nullable: true })
   description: string;
+
+  @ManyToOne(() => Api, (api) => api.endpoints, { onDelete: "CASCADE" })
+  api: Api;
+
+  constructor(params?: Partial<Endpoint>) {
+    super();
+    if (params) {
+      Object.assign(this, params);
+    }
+  }
 }

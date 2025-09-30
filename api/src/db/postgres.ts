@@ -1,14 +1,15 @@
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { config } from 'dotenv';
-import path from 'path';
-import { Endpoint } from '../endpoint/endpoint.entity';
-import { DataSourceOptions } from 'typeorm';
-import { DataSource } from 'typeorm';
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { config } from "dotenv";
+import path from "path";
+import { Endpoint } from "../endpoint/endpoint.entity";
+import { DataSourceOptions } from "typeorm";
+import { DataSource } from "typeorm";
+import { Api } from "../api/api.entity";
 
-config({ path: path.resolve(__dirname, '../../../.env') });
-export const migrations = [__dirname + '/migrations/**/*.ts'];
+config({ path: path.resolve(__dirname, "../../../.env") });
+export const migrations = [__dirname + "/migrations/**/*.ts"];
 
-export const entities = [Endpoint];
+export const entities = [Endpoint, Api];
 
 const host = process.env.POSTGRES_URL!;
 const port = Number(process.env.POSTGRES_PORT!);
@@ -17,7 +18,7 @@ const password = process.env.POSTGRES_PASSWORD!;
 const database = process.env.POSTGRES_DATABASE!;
 
 const options = {
-  type: 'postgres',
+  type: "postgres",
   host,
   port,
   username,
