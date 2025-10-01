@@ -9,10 +9,12 @@ import { ApiJobModule } from "./api-job/api-job.module";
 import { SchedulerModule } from "./scheduler/scheduler.module";
 import { ScheduleModule } from "@nestjs/schedule";
 import { ApiMetricModule } from "./api-metric/api-metric.module";
+import { RedisModule } from "./redis/redis.module";
 
 @Module({
   imports: [
     dbModule,
+    RedisModule,
     EndpointModule,
     cqrsModule,
     ApiModule,
