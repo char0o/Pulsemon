@@ -6,7 +6,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { AxiosResponse } from "axios";
 import { firstValueFrom } from "rxjs";
 import { ApiJob } from "src/api-job/api-job.entity";
-import { ApiMetric } from "src/api-metric/api-metric.entity";
 import { CreateApiMetricCommand } from "src/api-metric/commands/create-api-metric.command";
 import { Api } from "src/api/api.entity";
 import { HttpMethods } from "src/endpoint/http-methods.constants";
@@ -49,7 +48,7 @@ export class SchedulerService {
 
         for (const endpoint of apiToCall.endpoints) {
           const { path, method } = endpoint;
-
+          this.logger.log(`Call to ${endpoint.method} : ${apiToCall.url + endpoint.path}`);
           try {
             const url = apiToCall.url + path;
             let response: AxiosResponse;
@@ -89,9 +88,8 @@ export class SchedulerService {
             if (response.status >= 400) {
               errorMessage = response.statusText;
             }
-
             const params = {
-              api: apiToCall,
+              endpoint: endpoint,
               responseTime: durationMs,
               statusCode: response.status,
               errorMessage,
@@ -105,7 +103,7 @@ export class SchedulerService {
               errorMessage = error.message;
             }
             const params = {
-              api: apiToCall,
+              endpoint: endpoint,
               responseTime: 0,
               statusCode: 599,
               errorMessage: errorMessage,
@@ -118,10 +116,5 @@ export class SchedulerService {
         }
       }
     }
-  }
-
-  async onModuleInit() {
-    this.logger.log("Init module");
-    await this.checkJobs();
   }
 }

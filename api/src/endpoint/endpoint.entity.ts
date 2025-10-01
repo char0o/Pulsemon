@@ -1,7 +1,8 @@
 import { BaseEntity } from "../db/base.entity";
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { HttpMethods } from "./http-methods.constants";
 import { Api } from "../api/api.entity";
+import { ApiMetric } from "../api-metric/api-metric.entity";
 
 @Entity()
 export class Endpoint extends BaseEntity {
@@ -16,6 +17,9 @@ export class Endpoint extends BaseEntity {
 
   @ManyToOne(() => Api, (api) => api.endpoints, { onDelete: "CASCADE" })
   api: Api;
+
+  @OneToMany(() => ApiMetric, (apiMetric) => apiMetric.endpoint)
+  metrics: ApiMetric[];
 
   constructor(params?: Partial<Endpoint>) {
     super();

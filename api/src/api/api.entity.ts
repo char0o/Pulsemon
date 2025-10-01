@@ -1,4 +1,3 @@
-import { ApiMetric } from "../api-metric/api-metric.entity";
 import { BaseEntity } from "../db/base.entity";
 import { Endpoint } from "../endpoint/endpoint.entity";
 import { Column, Entity, OneToMany } from "typeorm";
@@ -19,9 +18,6 @@ export class Api extends BaseEntity {
 
   @OneToMany(() => Endpoint, (endpoint) => endpoint.api)
   endpoints: Endpoint[];
-
-  @OneToMany(() => ApiMetric, (apiMetric) => apiMetric.api)
-  metrics: ApiMetric[];
 
   constructor(params?: Partial<Api>) {
     super();

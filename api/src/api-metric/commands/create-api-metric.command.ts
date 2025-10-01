@@ -1,11 +1,11 @@
-import { Api } from "src/api/api.entity";
 import { ApiMetric } from "../api-metric.entity";
 import { Command, CommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Endpoint } from "src/endpoint/endpoint.entity";
 import { Repository } from "typeorm";
 
 export type CreateApiMetricParams = {
-  api: Api;
+  endpoint: Endpoint;
   responseTime: number;
   statusCode: number;
   errorMessage?: string;
@@ -27,9 +27,9 @@ export class CreateApiMetricHandler {
   ) {}
 
   async execute(command: CreateApiMetricCommand): Promise<ApiMetric> {
-    const { api, responseTime, statusCode, errorMessage } = command.params;
+    const { endpoint, responseTime, statusCode, errorMessage } = command.params;
 
-    const apiMetric = new ApiMetric({ api, responseTime, statusCode, errorMessage });
+    const apiMetric = new ApiMetric({ endpoint, responseTime, statusCode, errorMessage });
 
     return await this.apiMetricRepository.save(apiMetric);
   }
