@@ -1,10 +1,13 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable, Logger } from "@nestjs/common";
+import { CommandBus } from "@nestjs/cqrs";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { InjectRepository } from "@nestjs/typeorm";
 import { AxiosResponse } from "axios";
 import { firstValueFrom } from "rxjs";
 import { ApiJob } from "src/api-job/api-job.entity";
+import { ApiMetric } from "src/api-metric/api-metric.entity";
+import { CreateApiMetricCommand } from "src/api-metric/commands/create-api-metric.command";
 import { Api } from "src/api/api.entity";
 import { HttpMethods } from "src/endpoint/http-methods.constants";
 import { Repository } from "typeorm";
@@ -19,6 +22,7 @@ export class SchedulerService {
     private readonly apiJobRepository: Repository<ApiJob>,
     @InjectRepository(Api)
     private readonly apiRepository: Repository<Api>,
+    private readonly commandBus: CommandBus,
   ) {}
 
   @Cron(CronExpression.EVERY_10_SECONDS)
@@ -33,7 +37,6 @@ export class SchedulerService {
         : new Date(0);
 
       if (now >= nextRun) {
-        this.logger.log("Executing API call");
         const apiToCall = await this.apiRepository.findOne({
           where: { id: job.apiId },
           relations: ["endpoints"],
@@ -80,11 +83,38 @@ export class SchedulerService {
             }
             const end = Date.now();
             const durationMs = end - start;
-            console.log("Response time: ", durationMs);
-            console.log("Response: ", response.status);
+
+            let errorMessage: string | undefined = undefined;
+
+            if (response.status >= 400) {
+              errorMessage = response.statusText;
+            }
+
+            const params = {
+              api: apiToCall,
+              responseTime: durationMs,
+              statusCode: response.status,
+              errorMessage,
+            };
+
+            await this.commandBus.execute(new CreateApiMetricCommand(params));
           } catch (error) {
-            this.logger.error("Error executing API call", error.message);
+            let errorMessage = "Unknown error";
+
+            if (error instanceof Error) {
+              errorMessage = error.message;
+            }
+            const params = {
+              api: apiToCall,
+              responseTime: 0,
+              statusCode: 599,
+              errorMessage: errorMessage,
+            };
+
+            await this.commandBus.execute(new CreateApiMetricCommand(params));
           }
+          job.lastRun = new Date();
+          await this.apiJobRepository.save(job);
         }
       }
     }

@@ -6,12 +6,12 @@ import { DataSourceOptions } from "typeorm";
 import { DataSource } from "typeorm";
 import { Api } from "../api/api.entity";
 import { ApiJob } from "../api-job/api-job.entity";
-import { ApiConfig } from "../api-config/api-config.entity";
+import { ApiMetric } from "../api-metric/api-metric.entity";
 
 config({ path: path.resolve(__dirname, "../../../.env") });
 export const migrations = [__dirname + "/migrations/**/*.ts"];
 
-export const entities = [Endpoint, Api, ApiJob, ApiConfig];
+export const entities = [Endpoint, Api, ApiJob, ApiMetric];
 
 const host = process.env.POSTGRES_URL!;
 const port = Number(process.env.POSTGRES_PORT!);

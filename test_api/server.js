@@ -9,8 +9,21 @@ app.use((req, res, next) => {
     next();
   }, delay);
 });
-// Simple GET endpoint
+
 app.get('/api/users', (req, res) => {
+  res.send('Hello from Express!');
+});
+
+app.get('/api/teams', (req, res) => {
+  const fail = Math.random() < 0.3;
+  if (fail) {
+    res.status(401).send({ message: 'Unauthorized' });
+  } else {
+    res.send('Hello from Express!');
+  }
+});
+
+app.post('/api/users', (req, res) => {
   res.send('Hello from Express!');
 });
 

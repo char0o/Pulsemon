@@ -2,8 +2,8 @@ import { Command, CommandBus, CommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Api } from "../api.entity";
 import { Repository } from "typeorm";
-import { CreateApiConfigCommand } from "src/api-config/commands/create-api-config.command";
 import { CreateApiJobCommand } from "src/api-job/commands/create-api-job.command";
+import { DEFAULT_CALL_INTERVAL } from "../api.constants";
 
 export type CreateApiParams = {
   name: string;
@@ -30,9 +30,10 @@ export class CreateApiHandler {
   async execute(command: CreateApiCommand): Promise<CreateApiResult> {
     const { name, url, description } = command.params;
 
-    const api = await this.apiRepository.save(new Api({ name, url, description }));
+    const api = await this.apiRepository.save(
+      new Api({ name, url, description, callIntervalSeconds: DEFAULT_CALL_INTERVAL }),
+    );
 
-    await this.commandBus.execute(new CreateApiConfigCommand({ apiId: api.id }));
     await this.commandBus.execute(new CreateApiJobCommand({ apiId: api.id }));
 
     return api;

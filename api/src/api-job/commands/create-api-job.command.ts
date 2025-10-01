@@ -3,7 +3,7 @@ import { ApiJob } from "../api-job.entity";
 import { Repository } from "typeorm";
 import { Command, CommandHandler } from "@nestjs/cqrs";
 import { NotFoundException } from "@nestjs/common";
-import { ApiConfig } from "src/api-config/api-config.entity";
+import { Api } from "src/api/api.entity";
 
 export type CreateApiJobParams = {
   apiId: number;
@@ -22,26 +22,23 @@ export class CreateApiJobHandler {
   constructor(
     @InjectRepository(ApiJob)
     private readonly apiJobRepository: Repository<ApiJob>,
-    @InjectRepository(ApiConfig)
-    private readonly apiConfigRepository: Repository<ApiConfig>,
+    @InjectRepository(Api)
+    private readonly apiRepository: Repository<Api>,
   ) {}
 
   async execute(command: CreateApiJobCommand): Promise<ApiJob> {
     const { apiId } = command.params;
 
-    const apiConfig = await this.apiConfigRepository.findOne({
-      where: { id: apiId },
-      relations: ["api"],
-    });
+    const api = await this.apiRepository.findOneBy({ id: apiId });
 
-    if (!apiConfig) {
+    if (!api) {
       throw new NotFoundException("No API config found with the provided ID");
     }
 
     const apiJob = new ApiJob({
-      api: apiConfig.api,
-      apiId: apiConfig.api.id,
-      intervalSeconds: apiConfig.intervalSeconds,
+      api: api,
+      apiId: api.id,
+      intervalSeconds: api.callIntervalSeconds,
       lastRun: new Date(),
     });
 
