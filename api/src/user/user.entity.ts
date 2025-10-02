@@ -8,4 +8,11 @@ export class User extends SoftDeleteEntity {
 
   @Column()
   username: string;
+
+  constructor(params?: Partial<User>) {
+    super();
+    if (params) {
+      Object.assign(this, params);
+    }
+  }
 }

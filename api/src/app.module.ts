@@ -10,6 +10,8 @@ import { SchedulerModule } from "./scheduler/scheduler.module";
 import { ScheduleModule } from "@nestjs/schedule";
 import { ApiMetricModule } from "./api-metric/api-metric.module";
 import { RedisModule } from "./redis/redis.module";
+import { UserModule } from "./user/user.module";
+import { AuthModule } from "./auth/auth.module";
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { RedisModule } from "./redis/redis.module";
     ApiMetricModule,
     SchedulerModule,
     ScheduleModule.forRoot(),
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

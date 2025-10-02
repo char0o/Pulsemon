@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, UseGuards, ValidationPipe } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import {
   ApiOperation,
@@ -12,6 +12,8 @@ import { GetApiEndpointsQuery } from "src/endpoint/queries/get-api-endpoints.que
 import { CreateApiDto } from "./dtos/create-api.dto";
 import { ApiDto } from "./dtos/api.dto";
 import { CreateApiCommand } from "./commands/create-api.command";
+import { AuthGuard } from "src/auth/auth.gard";
+import type { Request } from "express";
 
 @Controller("/api")
 export class ApiController {
@@ -20,6 +22,7 @@ export class ApiController {
     private readonly commandBus: CommandBus,
   ) {}
 
+  @UseGuards(AuthGuard)
   @Get("endpoints")
   @ApiOperation({ summary: "Get a list of all endpoints with the provided API Id" })
   @ApiNotFoundResponse({ description: "No API found with the provided Id" })

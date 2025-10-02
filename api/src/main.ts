@@ -17,11 +17,13 @@ async function bootstrap() {
 
   const redisService = app.get(RedisService);
 
+  const redisSecret = process.env.REDIS_SECRET || "mysercret";
+
   app.use(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     session({
       store: redisService.store,
-      secret: process.env.REDIS_SECRET,
+      secret: redisSecret,
       resave: false,
       saveUninitialized: false,
       cookie: {

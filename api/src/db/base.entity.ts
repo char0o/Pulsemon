@@ -1,4 +1,3 @@
-import { User } from "src/user/user.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn } from "typeorm";
 
 export abstract class BaseEntity {
@@ -14,5 +13,5 @@ export abstract class SoftDeleteEntity extends BaseEntity {
   deletedAt: Date;
 
   @Column({ nullable: true })
-  deletedBy: User;
+  deletedById: number;
 }

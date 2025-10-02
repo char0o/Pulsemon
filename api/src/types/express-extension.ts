@@ -1,8 +1,7 @@
-import type { Request as ExpressRequest } from "express";
-import { User } from "../user/user.entity";
+import "express-session";
 
-declare global {
-  interface Request extends ExpressRequest {
-    userEntity?: User;
+declare module "express-session" {
+  interface SessionData {
+    userId?: number;
   }
 }
