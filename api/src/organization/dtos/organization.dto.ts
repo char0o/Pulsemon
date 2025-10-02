@@ -6,7 +6,7 @@ export class OrganizationDto {
   constructor(organization: Organization) {
     this.name = organization.name;
     this.description = organization.description;
-    this.apis = organization.apis.map((api) => new ApiDto(api));
+    this.apis = (organization.apis ?? []).map((api) => new ApiDto(api));
   }
   name: string;
   description: string;

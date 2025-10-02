@@ -6,9 +6,10 @@ import { GetApiEndpointsHandler } from "src/endpoint/queries/get-api-endpoints.q
 import { ApiController } from "./api.controller";
 import { CreateApiHandler } from "./commands/create-api.command";
 import { Organization } from "src/organization/organization.entity";
+import { User } from "src/user/user.entity";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Endpoint, Api, Organization])],
+  imports: [TypeOrmModule.forFeature([Endpoint, Api, Organization, User])],
   providers: [GetApiEndpointsHandler, CreateApiHandler],
   controllers: [ApiController],
 })

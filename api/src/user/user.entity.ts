@@ -13,6 +13,9 @@ export class User extends SoftDeleteEntity {
   @OneToMany(() => OrganizationMember, (organizationMember) => organizationMember.user)
   organizationMember: OrganizationMember[];
 
+  @Column({ default: false })
+  isVerified: boolean;
+
   constructor(params?: Partial<User>) {
     super();
     if (params) {

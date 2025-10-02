@@ -23,8 +23,6 @@ export class CreateOrganizationCommand extends Command<Organization> {
 @CommandHandler(CreateOrganizationCommand)
 export class CreateOrganizationHandler {
   constructor(
-    @InjectRepository(Organization)
-    private readonly organizationRepository: Repository<Organization>,
     @InjectRepository(OrganizationMember)
     private readonly organizationMemberRepository: Repository<OrganizationMember>,
   ) {}
@@ -43,7 +41,9 @@ export class CreateOrganizationHandler {
       organizationMembers: [organizationMember],
     });
     organizationMember.organization = organization;
-    
-    return await this.organizationRepository.save(organization);
+
+    await this.organizationMemberRepository.save(organizationMember);
+
+    return organization;
   }
 }

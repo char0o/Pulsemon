@@ -3,10 +3,18 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { AuthController } from "./auth.controller";
 import { User } from "src/user/user.entity";
 import { SignUpWithEmailHandler } from "./commands/sign-up-with-email.command";
+import { SignInWithEmailHandler } from "./commands/sign-in-with-email.command";
+import { VerifyAuthTokenHandler } from "./commands/verify-auth-token.command";
+import { CreateAuthTokenHandler } from "src/auth/commands/create-auth-token.command";
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
-  providers: [SignUpWithEmailHandler],
+  providers: [
+    SignUpWithEmailHandler,
+    SignInWithEmailHandler,
+    VerifyAuthTokenHandler,
+    CreateAuthTokenHandler,
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}

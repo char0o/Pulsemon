@@ -15,7 +15,7 @@ export class OrganizationMember extends SoftDeleteEntity {
   @ManyToOne(() => User)
   user: User;
 
-  @ManyToOne(() => Organization, { cascade: true })
+  @ManyToOne(() => Organization, { cascade: true, onDelete: "CASCADE" })
   organization: Organization;
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })

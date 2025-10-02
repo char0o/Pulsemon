@@ -1,8 +1,9 @@
 import { ConflictException } from "@nestjs/common";
-import { Command, CommandHandler } from "@nestjs/cqrs";
+import { Command, CommandBus, CommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/user/user.entity";
 import { Repository } from "typeorm";
+import { CreateAuthTokenCommand } from "./create-auth-token.command";
 
 export type SignUpWithEmailParams = {
   email: string;
@@ -22,19 +23,27 @@ export class SignUpWithEmailHandler {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly commandBus: CommandBus,
   ) {}
 
   async execute(command: SignUpWithEmailCommand): Promise<SignUpWithEmailResult> {
     const { email, username } = command.params;
 
-    const existingUser = await this.userRepository.findOneBy({ email });
+    let existingUser = await this.userRepository.findOneBy({ email });
 
-    if (existingUser) {
+    if (!existingUser) {
+      existingUser = new User({ email, username });
+      await this.userRepository.save(existingUser);
+    } else if (existingUser && existingUser.isVerified) {
       throw new ConflictException("Email already in use");
     }
 
-    const newUser = new User({ email, username });
+    const params = {
+      userId: existingUser.id,
+    };
 
-    return await this.userRepository.save(newUser);
+    await this.commandBus.execute(new CreateAuthTokenCommand(params));
+
+    return existingUser;
   }
 }

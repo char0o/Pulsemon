@@ -13,9 +13,13 @@ import { RedisModule } from "./redis/redis.module";
 import { UserModule } from "./user/user.module";
 import { AuthModule } from "./auth/auth.module";
 import { OrganizationModule } from "./organization/organization.module";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     dbModule,
     RedisModule,
     EndpointModule,
