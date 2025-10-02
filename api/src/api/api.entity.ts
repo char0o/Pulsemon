@@ -1,6 +1,7 @@
+import { Organization } from "../organization/organization.entity";
 import { BaseEntity } from "../db/base.entity";
 import { Endpoint } from "../endpoint/endpoint.entity";
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 
 @Entity()
 export class Api extends BaseEntity {
@@ -18,6 +19,9 @@ export class Api extends BaseEntity {
 
   @OneToMany(() => Endpoint, (endpoint) => endpoint.api)
   endpoints: Endpoint[];
+
+  @ManyToOne(() => Organization, (org) => org.apis)
+  organization: Organization;
 
   constructor(params?: Partial<Api>) {
     super();

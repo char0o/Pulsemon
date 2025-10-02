@@ -9,6 +9,7 @@ export type CreateApiParams = {
   name: string;
   url: string;
   description?: string;
+  organizationId: number;
 };
 
 export type CreateApiResult = Api;

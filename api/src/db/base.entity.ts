@@ -14,4 +14,8 @@ export abstract class SoftDeleteEntity extends BaseEntity {
 
   @Column({ nullable: true })
   deletedById: number;
+
+  isDeleted() {
+    return this.deletedAt != null;
+  }
 }

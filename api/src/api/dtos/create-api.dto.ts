@@ -13,4 +13,7 @@ export class CreateApiDto {
 
   @ApiProperty()
   description?: string;
+
+  @ApiProperty()
+  organizationId: number;
 }

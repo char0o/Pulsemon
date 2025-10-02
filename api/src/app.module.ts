@@ -12,6 +12,7 @@ import { ApiMetricModule } from "./api-metric/api-metric.module";
 import { RedisModule } from "./redis/redis.module";
 import { UserModule } from "./user/user.module";
 import { AuthModule } from "./auth/auth.module";
+import { OrganizationModule } from "./organization/organization.module";
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AuthModule } from "./auth/auth.module";
     ScheduleModule.forRoot(),
     UserModule,
     AuthModule,
+    OrganizationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

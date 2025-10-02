@@ -8,11 +8,13 @@ import { Api } from "../api/api.entity";
 import { ApiJob } from "../api-job/api-job.entity";
 import { ApiMetric } from "../api-metric/api-metric.entity";
 import { User } from "../user/user.entity";
+import { Organization } from "../organization/organization.entity";
+import { OrganizationMember } from "../organization/member/organization-member.entity";
 
 config({ path: path.resolve(__dirname, "../../../.env") });
 export const migrations = [__dirname + "/migrations/**/*.ts"];
 
-export const entities = [Endpoint, Api, ApiJob, ApiMetric, User];
+export const entities = [Endpoint, Api, ApiJob, ApiMetric, User, Organization, OrganizationMember];
 
 const host = process.env.POSTGRES_URL!;
 const port = Number(process.env.POSTGRES_PORT!);

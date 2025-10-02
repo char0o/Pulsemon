@@ -40,13 +40,14 @@ export class ApiController {
   @ApiBadRequestResponse({ description: "Provided parameters are not valid" })
   @ApiCreatedResponse({ description: "Api created" })
   async createApi(@Body(new ValidationPipe()) body: CreateApiDto): Promise<ApiDto> {
-    const api = await this.commandBus.execute(
-      new CreateApiCommand({
-        name: body.name,
-        url: body.url,
-        description: body.description,
-      }),
-    );
+    const params = {
+      name: body.name,
+      url: body.url,
+      description: body.description,
+      organizationId: body.organizationId,
+    };
+
+    const api = await this.commandBus.execute(new CreateApiCommand(params));
 
     return new ApiDto(api);
   }
