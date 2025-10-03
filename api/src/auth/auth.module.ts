@@ -6,6 +6,7 @@ import { SignUpWithEmailHandler } from "./commands/sign-up-with-email.command";
 import { SignInWithEmailHandler } from "./commands/sign-in-with-email.command";
 import { VerifyAuthTokenHandler } from "./commands/verify-auth-token.command";
 import { CreateAuthTokenHandler } from "src/auth/commands/create-auth-token.command";
+import { ValidateSessionHandler } from "./commands/validate-session.command";
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
@@ -14,6 +15,7 @@ import { CreateAuthTokenHandler } from "src/auth/commands/create-auth-token.comm
     SignInWithEmailHandler,
     VerifyAuthTokenHandler,
     CreateAuthTokenHandler,
+    ValidateSessionHandler,
   ],
   controllers: [AuthController],
 })

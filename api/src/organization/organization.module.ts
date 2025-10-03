@@ -6,10 +6,15 @@ import { CreateOrganizationHandler } from "./commands/create-organization.comman
 import { OrganizationController } from "./organization.controller";
 import { User } from "src/user/user.entity";
 import { DeleteOrganizationHandler } from "./commands/delete-organization.command";
+import { GetOrganizationMembershipHandler } from "./member/queries/get-organizations-membership.query";
 
 @Module({
   imports: [TypeOrmModule.forFeature([Organization, OrganizationMember, User])],
-  providers: [CreateOrganizationHandler, DeleteOrganizationHandler],
+  providers: [
+    CreateOrganizationHandler,
+    DeleteOrganizationHandler,
+    GetOrganizationMembershipHandler,
+  ],
   controllers: [OrganizationController],
 })
 export class OrganizationModule {}

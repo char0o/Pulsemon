@@ -2,10 +2,12 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Logger,
   Post,
   Req,
   Res,
+  UnauthorizedException,
   ValidationPipe,
 } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
@@ -27,6 +29,7 @@ import { SignInWithEmailDto } from "./dtos/sign-in-with-email.dto";
 import { SignInWithEmailCommand } from "./commands/sign-in-with-email.command";
 import { VerifyAuthTokenDto } from "./dtos/verify-auth-token.dto";
 import { VerifyAuthTokenCommand } from "./commands/verify-auth-token.command";
+import { ValidateSessionCommand } from "./commands/validate-session.command";
 
 @Controller("/auth")
 export class AuthController {
@@ -35,6 +38,23 @@ export class AuthController {
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
   ) {}
+
+  @Get()
+  async me(@Req() request: Request): Promise<UserDto> {
+    const user = request.requester;
+
+    if (!user) {
+      throw new UnauthorizedException("User is not authenticated");
+    }
+
+    const sessionValid = await this.commandBus.execute(new ValidateSessionCommand({ request }));
+
+    if (!sessionValid) {
+      throw new UnauthorizedException("Session is no longer valid");
+    }
+
+    return new UserDto(user);
+  }
 
   @Post("/sign-up")
   @ApiOperation({ summary: "Create a new account" })

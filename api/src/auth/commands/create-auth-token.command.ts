@@ -1,6 +1,6 @@
 import { Command, CommandHandler } from "@nestjs/cqrs";
 import { RedisService } from "../../redis/redis.service";
-import { randomBytes } from "crypto";
+import { randomInt } from "crypto";
 import { Logger } from "@nestjs/common";
 
 export type CreateAuthTokenParams = {
@@ -32,7 +32,7 @@ export class CreateAuthTokenHandler {
       await redisClient.del(reverseKey);
     }
 
-    const token = randomBytes(32).toString("hex");
+    const token = randomInt(100000, 1000000).toString();
     const tokenKey = `authlink:${token}`;
 
     this.logger.log(`Create auth token: ${token} for user ${userId}`);

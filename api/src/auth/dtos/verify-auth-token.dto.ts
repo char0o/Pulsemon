@@ -8,6 +8,6 @@ export class VerifyAuthTokenDto {
 
   @ApiProperty()
   @IsString()
-  @Length(64)
+  @Length(6)
   token: string;
 }

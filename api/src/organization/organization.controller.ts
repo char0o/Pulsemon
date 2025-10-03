@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Post,
   Req,
@@ -22,6 +23,7 @@ import {
   ApiForbiddenResponse,
 } from "@nestjs/swagger";
 import { DeleteOrganizationCommand } from "./commands/delete-organization.command";
+import { GetOrganizationMembershipQuery } from "./member/queries/get-organizations-membership.query";
 
 @Controller("/organization")
 export class OrganizationController {
@@ -67,5 +69,14 @@ export class OrganizationController {
     const result = this.commandBus.execute(new DeleteOrganizationCommand(params));
 
     return result;
+  }
+
+  @UseGuards(AuthGuard)
+  @Get("/membership")
+  async getOrganizationMembership(@Req() request: Request): Promise<OrganizationDto[]> {
+    const params = { requester: request.requester };
+    const organizations = await this.queryBus.execute(new GetOrganizationMembershipQuery(params));
+
+    return organizations.map((organization) => new OrganizationDto(organization));
   }
 }

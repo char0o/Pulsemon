@@ -34,6 +34,12 @@ async function bootstrap() {
     }),
   );
 
+  app.enableCors({
+    origin: "http://localhost:3001", // your frontend URL
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    credentials: true, // if you use cookies or auth headers
+  });
+
   await app.listen(process.env.PORT ?? 3000);
 }
 
