@@ -10,6 +10,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 
 export const migrations = [__dirname + "/migrations/**/*.ts"];
 
+
 export const entities = [Endpoint, Api, ApiJob, ApiMetric, User, Organization, OrganizationMember];
 
 export const dbModule = TypeOrmModule.forRootAsync({
@@ -21,7 +22,10 @@ export const dbModule = TypeOrmModule.forRootAsync({
     port: config.getOrThrow<number>("POSTGRES_PORT"),
     username: config.getOrThrow<string>("POSTGRES_USERNAME"),
     password: config.getOrThrow<string>("POSTGRES_PASSWORD"),
-    database: config.getOrThrow<string>("POSTGRES_DATABASE"),
+    database:
+      process.env.NODE_ENV === "test"
+        ? config.getOrThrow<string>("POSTGRES_TEST_DATABASE")
+        : config.getOrThrow<string>("POSTGRES_DATABASE"),
     entities: [__dirname + "/../**/*.entity{.ts,.js}"],
     migrations: [__dirname + "/migrations/**/*{.ts,.js}"],
   }),

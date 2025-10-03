@@ -21,6 +21,7 @@
     "db:migration:create": "npm run typeorm -- migration:create",
     "db:migration:generate": "npm run typeorm -- migration:generate -d ./src/db/postgres.ts",
     "db:migrate": "npm run typeorm migration:run -- -d ./src/db/postgres.ts",
+    "db:migrate:test": "cross-env NODE_ENV=test ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d ./src/db/postgres.ts",
     "lint": "eslint \"src/**/*.ts\" --fix",
     "format": "prettier --write 'src/**/*.{ts,js,json,md}'"
   },
@@ -61,6 +62,7 @@
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.45.0",
     "@typescript-eslint/parser": "^8.45.0",
+    "cross-env": "^10.1.0",
     "eslint": "^9.36.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
