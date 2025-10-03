@@ -53,6 +53,7 @@ export class DeleteOrganizationHandler {
       throw new ForbiddenException("User doesn't have the right to delete the organization");
     }
 
+    await this.organizationMemberRepository.softDelete({ organizationId: organization.id });
     await this.organizationRepository.softDelete({ id: organization.id });
 
     return { sucess: true };

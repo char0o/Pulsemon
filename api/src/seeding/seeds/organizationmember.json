@@ -1,0 +1,20 @@
+[
+  {
+    "name": "CharoPulsemon",
+    "object": {
+      "user": "Charo",
+      "organization": "Pulsemon",
+      "role": 0,
+      "joinedAt": "2025-10-03T14:21:04"
+    }
+  },
+  {
+    "name": "BobPulsemon",
+    "object": {
+      "user": "Bob",
+      "organization": "Pulsemon",
+      "role": 1,
+      "joinedAt": "2025-10-03T14:21:04"
+    }
+  }
+]

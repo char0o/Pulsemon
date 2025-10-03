@@ -15,13 +15,13 @@ export class OrganizationMember extends SoftDeleteEntity {
   @ManyToOne(() => User)
   user: User;
 
-  @ManyToOne(() => Organization, { cascade: true, onDelete: "CASCADE" })
+  @ManyToOne(() => Organization, { cascade: true })
   organization: Organization;
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   joinedAt: Date;
 
-  @Column()
+  @Column({ type: "enum", enum: OrganizationRole })
   role: OrganizationRole;
 
   constructor(params?: Partial<OrganizationMember>) {

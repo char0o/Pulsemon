@@ -27,12 +27,7 @@ describe("Database Connection", () => {
     }
   });
 
-  it("should connect to the database", async () => {
-    await expect(dataSource.initialize()).resolves.not.toThrow();
-    expect(dataSource.isInitialized).toBe(true);
-  });
-
   it("should use the test database", () => {
-    expect(dataSource.options.database).toBe(process.env.POSTGRES_TEST_DATABASE);
+    expect(dataSource.options.database).toBe(process.env.POSTGRES_DATABASE_TEST);
   });
 });

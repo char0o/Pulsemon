@@ -14,7 +14,10 @@ export const AppDataSource = new DataSource({
   port: Number(process.env.POSTGRES_PORT),
   username: process.env.POSTGRES_USERNAME,
   password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DATABASE,
+  database:
+    process.env.NODE_ENV === "test"
+      ? process.env.POSTGRES_DATABASE_TEST
+      : process.env.POSTGRES_DATABASE,
   entities: [Endpoint, Api, ApiJob, ApiMetric, User, Organization, OrganizationMember],
   migrations: [__dirname + "/migrations/**/*{.ts,.js}"],
 });

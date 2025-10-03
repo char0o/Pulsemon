@@ -14,6 +14,7 @@ import { UserModule } from "./user/user.module";
 import { AuthModule } from "./auth/auth.module";
 import { OrganizationModule } from "./organization/organization.module";
 import { ConfigModule } from "@nestjs/config";
+import { SeedingModule } from "./seeding/seeding-module";
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ConfigModule } from "@nestjs/config";
       isGlobal: true,
     }),
     dbModule,
+    SeedingModule,
     RedisModule,
     EndpointModule,
     cqrsModule,

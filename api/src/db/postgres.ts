@@ -12,7 +12,7 @@ export const dbModule = TypeOrmModule.forRootAsync({
     password: config.getOrThrow<string>("POSTGRES_PASSWORD"),
     database:
       process.env.NODE_ENV === "test"
-        ? config.getOrThrow<string>("POSTGRES_TEST_DATABASE")
+        ? config.getOrThrow<string>("POSTGRES_DATABASE_TEST")
         : config.getOrThrow<string>("POSTGRES_DATABASE"),
     entities: [__dirname + "/../**/*.entity{.ts,.js}"],
     migrations: [__dirname + "/migrations/**/*{.ts,.js}"],

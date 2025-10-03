@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Charo",
+    "object": {
+      "email": "directfromquebec@gmail.com",
+      "username": "charo",
+      "isVerified": true
+    }
+  },
+    {
+    "name": "Bob",
+    "object": {
+      "email": "microsoft@gmail.com",
+      "username": "Bob",
+      "isVerified": true
+    }
+  },
+    {
+    "name": "Richard",
+    "object": {
+      "email": "richard@gmail.com",
+      "username": "Richard",
+      "isVerified": true
+    }
+  }
+]

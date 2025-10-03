@@ -9,7 +9,7 @@ export class Endpoint extends BaseEntity {
   @Column()
   path: string;
 
-  @Column()
+  @Column({ type: "enum", enum: HttpMethods })
   method: HttpMethods;
 
   @Column({ nullable: true })
