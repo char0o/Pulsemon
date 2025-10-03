@@ -23,17 +23,21 @@ export class CreateAuthTokenHandler {
 
     const redisClient = this.redisService.client;
 
-    const token = randomBytes(32).toString("hex");
-    const key = `authlink:${userId}`;
+    const reverseKey = `authlink:${userId}`;
 
-    const existingToken = await redisClient.get(key);
+    const existingToken = await redisClient.get(reverseKey);
 
     if (existingToken) {
-      await redisClient.del(key);
+      await redisClient.del(`authlink:${existingToken}`);
+      await redisClient.del(reverseKey);
     }
+
+    const token = randomBytes(32).toString("hex");
+    const tokenKey = `authlink:${token}`;
 
     this.logger.log(`Create auth token: ${token} for user ${userId}`);
 
-    await redisClient.set(key, token, { EX: 15 * 60 });
+    await redisClient.set(tokenKey, userId, { EX: 15 * 60 });
+    await redisClient.set(reverseKey, token, { EX: 15 * 60 });
   }
 }

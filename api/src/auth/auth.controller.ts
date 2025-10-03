@@ -1,6 +1,16 @@
-import { Body, Controller, Logger, Post, Req, Res, ValidationPipe } from "@nestjs/common";
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Logger,
+  Post,
+  Req,
+  Res,
+  ValidationPipe,
+} from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import {
+  ApiBadRequestResponse,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiNoContentResponse,
@@ -30,15 +40,18 @@ export class AuthController {
   @ApiOperation({ summary: "Create a new account" })
   @ApiCreatedResponse({ description: "User succesfully created" })
   @ApiConflictResponse({ description: "Email already in use" })
+  @ApiBadRequestResponse({ description: "User is already authenticated" })
   async signUp(@Req() request: Request, @Body(new ValidationPipe()) body: SignUpWithEmailDto) {
+    if (request.session?.userId) {
+      throw new BadRequestException("User already authenticated");
+    }
+
     const params = {
       email: body.email,
       username: body.username,
     };
 
     const user = await this.commandBus.execute(new SignUpWithEmailCommand(params));
-
-    request.session.userId = user.id;
 
     return new UserDto(user);
   }
@@ -47,7 +60,15 @@ export class AuthController {
   @ApiOperation({ summary: "Sign in with email" })
   @ApiNoContentResponse({ description: "Verification link sent to email" })
   @ApiNotFoundResponse({ description: "No user with email found" })
-  async signIn(@Body(new ValidationPipe()) body: SignInWithEmailDto): Promise<void> {
+  @ApiBadRequestResponse({ description: "User is already authenticated" })
+  async signIn(
+    @Req() request: Request,
+    @Body(new ValidationPipe()) body: SignInWithEmailDto,
+  ): Promise<void> {
+    if (request.session?.userId) {
+      throw new BadRequestException("User already authenticated");
+    }
+
     const params = {
       email: body.email,
     };

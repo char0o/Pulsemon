@@ -20,7 +20,7 @@
     "db:drop": "npm run typeorm schema:drop -- -d ./src/db/postgres.ts",
     "db:migration:create": "npm run typeorm -- migration:create",
     "db:migration:generate": "npm run typeorm -- migration:generate -d ./src/db/postgres.ts",
-    "db:migrate": "npm run typeorm migration:run -- -d ./src/db/postgres.ts",
+    "db:migrate": "npm run typeorm migration:run -- -d ./src/db/datasource.ts",
     "lint": "eslint \"src/**/*.ts\" --fix",
     "format": "prettier --write 'src/**/*.{ts,js,json,md}'"
   },
