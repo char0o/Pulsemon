@@ -50,6 +50,7 @@ export class VerifyAuthTokenHandler {
     await this.userRepository.save(user);
 
     await redisClient.del(key);
+    await redisClient.del(`authlink:${userId}`);
 
     return user;
   }
