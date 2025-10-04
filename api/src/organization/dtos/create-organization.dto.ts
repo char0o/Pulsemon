@@ -8,7 +8,5 @@ export class CreateOrganizationDto {
   name: string;
 
   @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
   description?: string;
 }

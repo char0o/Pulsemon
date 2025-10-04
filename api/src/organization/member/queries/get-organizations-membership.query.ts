@@ -29,7 +29,7 @@ export class GetOrganizationMembershipHandler {
 
     const organizationMembers = await this.organizationMemberRepository.find({
       where: { userId: requester.id },
-      relations: ["organizations"],
+      relations: ["organization"],
     });
 
     return organizationMembers.map((organizationMember) => organizationMember.organization);

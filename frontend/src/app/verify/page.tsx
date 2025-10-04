@@ -14,6 +14,8 @@ export default function VerifyPage() {
   const [loading, setLoading] = useState(false);
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   const handlePaste = (e: React.ClipboardEvent, startIndex: number) => {
     const pasteData = e.clipboardData.getData("Text").replace(/\D/g, "");
     if (!pasteData) return;
@@ -57,12 +59,11 @@ export default function VerifyPage() {
     setLoading(true);
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
       const res = await fetch(`${API_URL}/auth/verify-auth-token`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, token: joinedToken }),
+        credentials: "include",
       });
 
       const data = await res.json();
@@ -72,8 +73,12 @@ export default function VerifyPage() {
       }
 
       router.push("/dashboard");
-    } catch (err: any) {
-      setError(err.message || "Something went wrong");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Something went wrong");
+      }
     } finally {
       setLoading(false);
     }
@@ -115,7 +120,9 @@ export default function VerifyPage() {
               onChange={(e) => handleChange(idx, e.target.value)}
               onKeyDown={(e) => handleKeyDown(idx, e)}
               onPaste={(e) => handlePaste(e, idx)}
-              ref={(el) => (inputRefs.current[idx] = el)}
+              ref={(el: HTMLInputElement | null) => {
+                inputRefs.current[idx] = el;
+              }}
             />
           ))}
         </div>

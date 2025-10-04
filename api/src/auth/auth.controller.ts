@@ -29,7 +29,6 @@ import { SignInWithEmailDto } from "./dtos/sign-in-with-email.dto";
 import { SignInWithEmailCommand } from "./commands/sign-in-with-email.command";
 import { VerifyAuthTokenDto } from "./dtos/verify-auth-token.dto";
 import { VerifyAuthTokenCommand } from "./commands/verify-auth-token.command";
-import { ValidateSessionCommand } from "./commands/validate-session.command";
 
 @Controller("/auth")
 export class AuthController {
@@ -40,20 +39,12 @@ export class AuthController {
   ) {}
 
   @Get()
-  async me(@Req() request: Request): Promise<UserDto> {
-    const user = request.requester;
+  me(@Req() request: Request) {
+    const userId = request.session?.userId;
 
-    if (!user) {
+    if (!userId) {
       throw new UnauthorizedException("User is not authenticated");
     }
-
-    const sessionValid = await this.commandBus.execute(new ValidateSessionCommand({ request }));
-
-    if (!sessionValid) {
-      throw new UnauthorizedException("Session is no longer valid");
-    }
-
-    return new UserDto(user);
   }
 
   @Post("/sign-up")

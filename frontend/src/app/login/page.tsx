@@ -26,15 +26,18 @@ export default function LoginPage() {
         body: JSON.stringify({ email }),
       });
 
-      const data = await res.json();
-
       if (!res.ok) {
-        throw new Error(data.message || "Failed to send login email");
+        const data = await res.json();
+        throw new Error(data.message);
       }
 
       router.push(`/verify?email=${encodeURIComponent(email)}`);
-    } catch (err: any) {
-      setError("Email is not registered to any account.");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Unknown error");
+      }
     } finally {
       setLoading(false);
     }
@@ -56,7 +59,7 @@ export default function LoginPage() {
         </p>
 
         <p className="text-gray-400 text-sm mb-4 text-center">
-          Don't have an account?{" "}
+          {"Don't have an account?"}{" "}
           <Link
             href="/sign-up"
             className="text-indigo-600 font-semibold hover:underline"

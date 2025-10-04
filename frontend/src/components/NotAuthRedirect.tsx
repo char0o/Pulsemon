@@ -3,11 +3,11 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-type AuthRedirectProps = {
+type NotAuthRedirectProps = {
   redirectTo: string;
 };
 
-export default function AuthRedirect({ redirectTo }: AuthRedirectProps) {
+export default function NotAuthRedirect({ redirectTo }: NotAuthRedirectProps) {
   const router = useRouter();
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -16,7 +16,7 @@ export default function AuthRedirect({ redirectTo }: AuthRedirectProps) {
     async function checkAuth() {
       try {
         const res = await fetch(`${API_URL}/auth`, { credentials: "include" });
-        if (res.ok) {
+        if (!res.ok) {
           router.replace(redirectTo);
         }
       } catch (err: unknown) {

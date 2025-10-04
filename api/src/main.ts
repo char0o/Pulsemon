@@ -9,6 +9,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle("Pulsemon API")
+    .addCookieAuth("connect.sid")
     .setDescription("API Documentation for Pulsemon")
     .build();
 
@@ -20,7 +21,6 @@ async function bootstrap() {
   const redisSecret = process.env.REDIS_SECRET || "mysercret";
 
   app.use(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     session({
       store: redisService.store,
       secret: redisSecret,
@@ -35,7 +35,7 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: "http://localhost:3001", // your frontend URL
+    origin: "http://localhost:3000", // your frontend URL
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     credentials: true, // if you use cookies or auth headers
   });
